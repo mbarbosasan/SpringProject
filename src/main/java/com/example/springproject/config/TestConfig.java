@@ -1,8 +1,10 @@
 package com.example.springproject.config;
 
+import com.example.springproject.Entities.Category;
 import com.example.springproject.Entities.Enums.OrderStatus;
 import com.example.springproject.Entities.Order;
 import com.example.springproject.Entities.User;
+import com.example.springproject.Repositories.CategoryRepository;
 import com.example.springproject.Repositories.OrderRepository;
 import com.example.springproject.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,21 @@ public class TestConfig implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public void run(String... args) throws Exception {
+
+        Category category1 = new Category(null, "Electronics");
+        Category category2 = new Category(null, "Ebook");
+        Category category3 = new Category(null, "Computers");
+
+        categoryRepository.saveAll(Arrays.asList(category1, category2, category3));
+
         User user1 = new User(null, "Maria Brown", "maria@mail.com", "999999", "1234567");
         User user2 = new User(null, "Alex Green", "alex@mail.com", "888888", "123456");
+
         Order o1 = new Order(null, Instant.parse("2022-07-07T19:00:00Z"), OrderStatus.PAID, user1);
         Order o2 = new Order(null, Instant.parse("2022-07-06T15:00:00Z"), OrderStatus.DELIVERED, user2);
         Order o3 = new Order(null, Instant.parse("2022-07-05T12:00:00Z"),OrderStatus.DELIVERED, user1);
