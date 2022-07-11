@@ -1,14 +1,8 @@
 package com.example.springproject.config;
 
-import com.example.springproject.Entities.Category;
+import com.example.springproject.Entities.*;
 import com.example.springproject.Entities.Enums.OrderStatus;
-import com.example.springproject.Entities.Order;
-import com.example.springproject.Entities.Product;
-import com.example.springproject.Entities.User;
-import com.example.springproject.Repositories.CategoryRepository;
-import com.example.springproject.Repositories.OrderRepository;
-import com.example.springproject.Repositories.ProductRepository;
-import com.example.springproject.Repositories.UserRepository;
+import com.example.springproject.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +22,8 @@ public class TestConfig implements CommandLineRunner {
     private CategoryRepository categoryRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -62,8 +58,14 @@ public class TestConfig implements CommandLineRunner {
         Order o3 = new Order(null, Instant.parse("2022-07-05T12:00:00Z"),OrderStatus.DELIVERED, user1);
         Order o4 = new Order(null, Instant.parse("2022-07-06T08:00:00Z"), OrderStatus.WAITING_PAYMENT, user2);
 
-
         userRepository.saveAll(Arrays.asList(user1, user2));
         orderRepository.saveAll(Arrays.asList(o1, o2, o3, o4));
+
+        OrderItem receipt1 = new OrderItem(o1, product1, 2, product1.getPrice());
+        OrderItem receipt2 = new OrderItem(o1, product3, 1, product3.getPrice());
+        OrderItem receipt3 = new OrderItem(o2, product3, 2, product3.getPrice());
+        OrderItem receipt4 = new OrderItem(o3, product5, 2, product5.getPrice());
+
+        orderItemRepository.saveAll(Arrays.asList(receipt1, receipt2, receipt3, receipt4));
     }
 }

@@ -2,12 +2,16 @@ package com.example.springproject.Entities;
 
 import com.example.springproject.Entities.Enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name = "tb_orders")
 public class Order implements Serializable {
@@ -22,7 +26,8 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_Id")
     private User client;
-
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
     public Order() {};
 
     public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
@@ -66,6 +71,10 @@ public class Order implements Serializable {
         }
     }
 
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +82,7 @@ public class Order implements Serializable {
         Order order = (Order) o;
         return id.equals(order.id);
     }
+
 
     @Override
     public int hashCode() {
